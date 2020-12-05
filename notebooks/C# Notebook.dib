@@ -1,0 +1,5 @@
+#!csharp
+
+Console.WriteLine(DateTime.Now.ToShortDateString().Replace('/', '-'));
+
+Console.WriteLine(!String.IsNullOrWhiteSpace(" x")? "string": "null");

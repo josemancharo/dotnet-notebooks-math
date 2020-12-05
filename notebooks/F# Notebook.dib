@@ -1,0 +1,56 @@
+#!markdown
+
+# Maclurian Sine Function
+A .NET Notebook illustrating the usage of Maclurian polynomials, symbolic processing, and F# to create our own sine function
+
+For documentation, see
+https://symbolics.mathdotnet.com/
+
+#!fsharp
+
+#r "nuget: MathNet.Symbolics"
+#r "nuget: MathNet.Numerics"
+
+open System.Numerics
+open MathNet.Numerics
+open MathNet.Symbolics
+
+open Operators
+
+#!fsharp
+
+// A quick example of symbolic computation
+let x = symbol "x"
+let y = symbol "y"
+
+(1/(x*y)) |> Infix.format |> printfn "%s"
+
+#!markdown
+
+A Maclurian Polynomial is defined as follows:
+`f(x) = (f(0)x^0)/0! + (f'(0)x^1)/1! ... (fn'(0)x^n)/n!`
+
+It is used to estimate the values of complex funcitons, such as trigs and radicals.
+
+The maclurian series for a sine is as follows
+`summation (n=0; n<infinty)[ (((-1)^n)*x^(2n+1)))/(2n+1)! ]`
+
+#!markdown
+
+#### Maclurian Example
+Experiment changing the coefficient of `Math.PI` in the variable theta. You will notice that the Maclurian estimation of sine is very accurate.
+
+#!fsharp
+
+let theta = (0.25*Math.PI) 
+
+//there is no native factorial function (n!)
+let factorial n = [1. .. n] |> List.reduce ( * )
+
+let hardCodedMaclurianSine x =
+    (x**1.)/1. - (x**3.)/(factorial 3.) + (x**5.)/(factorial 5.) - (x**7.)/(factorial 7.) + (x**9.)/(factorial 9.) - (x**11.)/(factorial 11.) + (x**13.)/(factorial 13.) - (x**15.)/(factorial 15.) + (x**17.)/(factorial 17.) - (x**19.)/(factorial 19.) + (x**21.)/(factorial 21.) - (x**23.)/(factorial 23.) + (x**25.)/(factorial 25.)
+
+//If I go with the Maclurian polynomial until n=25, it is virtually the same value of sine as the system sine
+
+Math.Sin theta |> printfn "using system sine: %f"
+hardCodedMaclurianSine theta |> printfn "using Maclurian sine: %f"
